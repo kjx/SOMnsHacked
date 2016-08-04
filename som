@@ -149,7 +149,8 @@ BOOT_CLASSPATH = ('-Xbootclasspath/a:'
              + BASE_DIR + '/libs/truffle/mxbuild/dists/truffle-debug.jar:'
              + BASE_DIR + '/libs/jline-2.11.jar:'
              + BASE_DIR + '/libs/websocket/dist/websocket.jar:'
-             + BASE_DIR + '/libs/minimal-json/build/minimal-json.jar')
+             + BASE_DIR + '/libs/minimal-json/build/minimal-json.jar:'
+             + '/Users/kjx/grace/jernan')
 
 if args.coveralls_repo_token:
     BOOT_CLASSPATH += ':' + BASE_DIR + '/libs/coveralls-truffle/coveralls-truffle.jar'
@@ -267,6 +268,8 @@ if args.java_properties:
 all_args = JAVA_ARGS + flags + SOM_ARGS + args.args
 
 if args.verbose:
+    import os
+    print "CWDL " + os.getcwd()
     print "CMD: " + java_bin + ' ' + ' '.join(all_args)
 
 os.execvp(java_bin, all_args)

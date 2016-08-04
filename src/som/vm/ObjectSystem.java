@@ -91,7 +91,6 @@ import som.vmobjects.SObject;
 import som.vmobjects.SObjectWithClass.SObjectWithoutFields;
 import som.vmobjects.SSymbol;
 
-
 public final class ObjectSystem {
 
   @CompilationFinal
@@ -133,8 +132,18 @@ public final class ObjectSystem {
       return loadedModules.get(file.getAbsolutePath());
     }
 
-    MixinDefinition module = SourcecodeCompiler.compileModule(file);
+    MixinDefinition module;
+
+    if (filename.endsWith(".grace")) {
+
+        module = Grace.SOMBridge.parseForSOM(filename,file);
+    } else {
+        module = SourcecodeCompiler.compileModule(file);
+    }
+
     loadedModules.put(file.getAbsolutePath(), module);
+
+    System.out.println("KJX loaded " + filename);
 
     return module;
   }
@@ -549,6 +558,8 @@ Classes.transferClass.getSOMClass().setClassGroup(Classes.metaclassClass.getInst
         handlePromiseResult((SPromise) result);
         return;
       } else {
+        //KJX
+        System.exit(0);
         throw new NotYetImplementedException();
       }
     } catch (InterruptedException | ExecutionException e) {

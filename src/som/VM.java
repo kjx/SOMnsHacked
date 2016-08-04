@@ -247,6 +247,7 @@ public final class VM {
   }
 
   public static void main(final String[] args) {
+      System.out.println("Hello James");
     Builder builder = PolyglotEngine.newBuilder();
     builder.config(SomLanguage.MIME_TYPE, SomLanguage.CMD_ARGS, args);
     VMOptions vmOptions = new VMOptions(args);
@@ -315,8 +316,9 @@ public final class VM {
       if (vmOptions.dynamicMetricsEnabled) {
         instruments.get(DynamicMetrics.ID).setEnabled(true);
       }
-
+      System.out.println("KJX SomLanguage.START");
       engine.eval(SomLanguage.START);
+      System.out.println("KJX SomLanguage about to dispose");
       engine.dispose();
     } catch (IOException e) {
       throw new RuntimeException("This should never happen", e);

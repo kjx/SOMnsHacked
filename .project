@@ -3,6 +3,7 @@
 	<name>SOMns</name>
 	<comment></comment>
 	<projects>
+		<project>Grace</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

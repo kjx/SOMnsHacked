@@ -26,6 +26,7 @@ package som.compiler;
 
 import static som.interpreter.SNodeFactory.createCatchNonLocalReturn;
 import static som.interpreter.SNodeFactory.createNonLocalReturn;
+import static som.vm.Symbols.symbolFor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +55,7 @@ import som.interpreter.nodes.ReturnNonLocalNode;
 import som.vmobjects.SInvokable;
 import som.vmobjects.SInvokable.SInitializer;
 import som.vmobjects.SSymbol;
+
 
 
 public final class MethodBuilder {
@@ -105,6 +107,12 @@ public final class MethodBuilder {
     throwsNonLocalReturn          = false;
     needsToCatchNonLocalReturn    = false;
     embeddedBlockMethods = new ArrayList<SInvokable>();
+  }
+
+
+  public void debugPrint() {
+      System.out.println(arguments);
+      System.out.println(locals);
   }
 
   public Collection<Argument> getArguments() {
@@ -236,6 +244,8 @@ public final class MethodBuilder {
     String cls = holder != null && holder.isClassSide() ? "_class" : "";
     String name = holder == null ? "_unknown_" : holder.getName().getString();
 
+    if (ssBody.getSource() == null) {return ssBody;}
+
     SourceSection ssMethod = ssBody.getSource().createSection(
         name + cls + ">>" + signature.toString(),
         ssBody.getStartLine(), ssBody.getStartColumn(),
@@ -316,6 +326,8 @@ public final class MethodBuilder {
    * of methods (only in methods).
    */
   protected Variable getVariable(final String varName) {
+    //System.out.println("getVariable <" + varName + ">");
+    // debugPrint();
     if (locals.containsKey(varName)) {
       return locals.get(varName);
     }
@@ -324,6 +336,7 @@ public final class MethodBuilder {
       return arguments.get(varName);
     }
 
+    //System.out.println("getVariable not local or argument");
     if (outerBuilder != null) {
       Variable outerVar = outerBuilder.getVariable(varName);
       if (outerVar != null) {
@@ -373,9 +386,11 @@ public final class MethodBuilder {
       return getSelfRead(source);
     }
 
+    //System.out.println("gIRS <" + selector.getString() +">");
     // first look up local or argument variables
     Variable variable = getVariable(selector.getString());
     if (variable != null) {
+      //System.out.println("gIRS got variable");
       return getReadNode(selector.getString(), source);
     }
 
@@ -384,6 +399,7 @@ public final class MethodBuilder {
       return SNodeFactory.createMessageSend(selector, new ExpressionNode[] {getSelfRead(source)}, false, source);
     } else {
       // otherwise, it is an implicit receiver send
+      //System.out.println("gIRS doing cIRS");
       return SNodeFactory.createImplicitReceiverSend(selector,
           new ExpressionNode[] {getSelfRead(source)},
           getCurrentMethodScope(), getEnclosingMixinBuilder().getMixinId(), source);
@@ -406,6 +422,37 @@ public final class MethodBuilder {
         new ExpressionNode[] {getSelfRead(source), exp},
         getCurrentMethodScope(), getEnclosingMixinBuilder().getMixinId(), source);
   }
+
+
+  public ExpressionNode getGraceSetterSend(final String somNSname,  //KJX
+      final ExpressionNode exp, final SourceSection source) {
+    // TODO: we probably need here a sanity check and perhaps a parser error
+    //       if we try to assign to an argument
+    // write directly to local variables (excluding arguments)
+
+      assert somNSname.endsWith(":=");
+
+    String identifier = somNSname.substring(0,somNSname.length() - 2);
+    System.out.println("getGraceSetterSend SOMnName<" + somNSname + "> trimmed <" + identifier + ">");
+
+    debugPrint();
+
+    Local variable = getLocal(identifier);
+    if (variable != null) {
+        System.out.println("getGraceSetterSend Binding to local!");
+      return getWriteNode(identifier, exp, source);
+    }
+
+      System.out.println("getGraceSetterSend building as a setter send");
+    // otherwise, it is a setter send.
+    return SNodeFactory.createImplicitReceiverSend(
+        symbolFor(somNSname),
+        new ExpressionNode[] {getSelfRead(source), exp},
+        getCurrentMethodScope(), getEnclosingMixinBuilder().getMixinId(), source);
+  }
+
+
+
 
   protected Local getLocal(final String varName) {
     if (locals.containsKey(varName)) {

@@ -143,6 +143,18 @@ public final class Lexer {
       assert charIndex   >= 0;
     }
 
+    public SourceCoordinate(final int startLine, final int startColumn, final int charIndex, final int lastNonWhiteIdx) {
+      this.startLine   = startLine;
+      this.startColumn = startColumn;
+      this.charIndex   = charIndex;
+      this.lastNonWhiteIdx = lastNonWhiteIdx;
+      assert startLine   >= 0;
+      assert startColumn >= 0;
+      assert charIndex   >= 0;
+    }
+
+
+
     @Override
     public String toString() {
       return "SrcCoord(line: " + startLine + ", col: " + startColumn + ")";

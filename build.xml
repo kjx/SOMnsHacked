@@ -23,6 +23,7 @@
         <pathelement location="${truffle.build}/truffle-debug.jar" />
         <pathelement location="${truffle.build}/truffle-dsl-processor.jar" />
         <pathelement location="${truffle.build}/truffle-tck.jar" />
+        <pathelement location="/Users/kjx/grace/jernan" />
     </path>
 
     <target name="clean" description="Remove build directories and generated code">

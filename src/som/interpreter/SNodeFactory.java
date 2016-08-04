@@ -2,6 +2,10 @@ package som.interpreter;
 
 import java.util.List;
 
+import com.oracle.truffle.api.frame.FrameSlot;
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.source.SourceSection;
+
 import som.compiler.MixinBuilder.MixinDefinitionId;
 import som.compiler.MixinDefinition.SlotDefinition;
 import som.compiler.Variable.Argument;
@@ -36,10 +40,6 @@ import som.interpreter.objectstorage.InitializerFieldWriteNodeGen;
 import som.vm.NotYetImplementedException;
 import som.vmobjects.SInvokable;
 import som.vmobjects.SSymbol;
-
-import com.oracle.truffle.api.frame.FrameSlot;
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.source.SourceSection;
 
 
 public final class SNodeFactory {
