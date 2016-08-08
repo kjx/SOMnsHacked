@@ -111,8 +111,10 @@ public final class MethodBuilder {
 
 
   public void debugPrint() {
-      System.out.println(arguments);
-      System.out.println(locals);
+      System.out.println("Method Builder:");
+      System.out.println("signature=" + signature);
+      System.out.println("arguments=" + arguments);
+      System.out.println("locals=" + locals);
   }
 
   public Collection<Argument> getArguments() {
@@ -326,8 +328,8 @@ public final class MethodBuilder {
    * of methods (only in methods).
    */
   protected Variable getVariable(final String varName) {
-    //System.out.println("getVariable <" + varName + ">");
-    // debugPrint();
+//    System.out.println("getVariable <" + varName + ">");
+//    debugPrint();
     if (locals.containsKey(varName)) {
       return locals.get(varName);
     }
@@ -336,7 +338,7 @@ public final class MethodBuilder {
       return arguments.get(varName);
     }
 
-    //System.out.println("getVariable not local or argument");
+//    System.out.println("getVariable not local or argument");
     if (outerBuilder != null) {
       Variable outerVar = outerBuilder.getVariable(varName);
       if (outerVar != null) {
@@ -433,17 +435,17 @@ public final class MethodBuilder {
       assert somNSname.endsWith(":=");
 
     String identifier = somNSname.substring(0,somNSname.length() - 2);
-    System.out.println("getGraceSetterSend SOMnName<" + somNSname + "> trimmed <" + identifier + ">");
+    //System.out.println("getGraceSetterSend SOMnName<" + somNSname + "> trimmed <" + identifier + ">");
 
     debugPrint();
 
     Local variable = getLocal(identifier);
     if (variable != null) {
-        System.out.println("getGraceSetterSend Binding to local!");
+        //System.out.println("getGraceSetterSend Binding to local!");
       return getWriteNode(identifier, exp, source);
     }
 
-      System.out.println("getGraceSetterSend building as a setter send");
+      //System.out.println("getGraceSetterSend building as a setter send");
     // otherwise, it is a setter send.
     return SNodeFactory.createImplicitReceiverSend(
         symbolFor(somNSname),
