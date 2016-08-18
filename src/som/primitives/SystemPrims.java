@@ -55,6 +55,8 @@ public final class SystemPrims {
     return Nil.nilObject;
   }
 
+
+
   @GenerateNodeFactory
   @Primitive("load:")
   public abstract static class LoadPrim extends UnaryExpressionNode {
@@ -63,6 +65,31 @@ public final class SystemPrims {
     @Specialization
     public final Object doSObject(final String moduleName) {
       return loadModule(moduleName);
+    }
+  }
+
+  public static Object graceHook = Nil.nilObject;
+
+  @GenerateNodeFactory
+  @Primitive("getGraceHook:")
+  public abstract static class GetGraceHookPrim extends UnaryExpressionNode {
+    public GetGraceHookPrim(final SourceSection source) { super(false, source); }
+
+    @Specialization
+    public final Object doSObject(final Object receiver) {
+      return graceHook;
+    }
+  }
+
+  @GenerateNodeFactory
+  @Primitive("setGraceHook:")
+  public abstract static class SetGraceHookPrim extends UnaryExpressionNode {
+    public SetGraceHookPrim(final SourceSection source) { super(false, source); }
+
+    @Specialization
+    public final Object doSObject(final Object receiver) {
+      graceHook = receiver;
+      return graceHook;
     }
   }
 

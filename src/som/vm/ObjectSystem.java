@@ -128,6 +128,8 @@ public final class ObjectSystem {
       throws IOException {
     File file = new File(filename);
 
+    System.out.println("KJX about to load " + filename);
+
     if (loadedModules.containsKey(file.getAbsolutePath())) {
       return loadedModules.get(file.getAbsolutePath());
     }
@@ -529,8 +531,11 @@ Classes.transferClass.getSOMClass().setClassGroup(Classes.metaclassClass.getInst
     System.exit(1); // just in case it was disable for VM.errorExit
   }
 
+  public static Object platformObject;
+
   public void executeApplication(final SObjectWithoutFields vmMirror, final Actor mainActor) {
     Object platform = platformModule.instantiateObject(platformClass, vmMirror);
+    platformObject = platform; //KJX
 
     SourceSection source = Source.fromNamedText("",
         "ObjectSystem.executeApplication").createSection("start", 1);
@@ -573,5 +578,9 @@ Classes.transferClass.getSOMClass().setClassGroup(Classes.metaclassClass.getInst
     SInvokable method = (SInvokable) platformClass.getSOMClass().lookupMessage(
         Symbols.symbolFor(selector), AccessModifier.PUBLIC);
     return method.invoke(platformClass);
+  }
+  public Object getPlatformObject() {  //KJX
+      assert platformObject != null;
+      return platformObject;
   }
 }

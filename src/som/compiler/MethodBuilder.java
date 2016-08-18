@@ -408,6 +408,45 @@ public final class MethodBuilder {
     }
   }
 
+  public ExpressionNode getGraceImplicitReceiverSend(final SSymbol selector,
+      final List<ExpressionNode> nonReceiverArguments,
+      final SourceSection source) {
+    // we need to handle super and self special here
+    if ("super".equals(selector.getString())) {
+      assert nonReceiverArguments.size() == 0 ;
+      return getSuperReadNode(source);
+    }
+    if ("self".equals(selector.getString())) {
+      assert nonReceiverArguments.size() == 0 ;
+      return getSelfRead(source);
+    }
+
+    //System.out.println("gGIRS <" + selector.getString() +">");
+    // first look up local or argument variables
+    Variable variable = getVariable(selector.getString());
+    if (variable != null) {
+    //System.out.println("gGIRS got variable");
+      assert nonReceiverArguments.size() == 0;
+      return getReadNode(selector.getString(), source);
+    }
+
+    if (getEnclosingMixinBuilder() == null) {
+      assert nonReceiverArguments.size() == 0;
+      // this is normally only for the inheritance clauses for modules the case
+      return SNodeFactory.createMessageSend(selector, new ExpressionNode[] {getSelfRead(source)}, false, source);
+    } else {
+      // otherwise, it is an implicit receiver send
+      //System.out.println("gGIRS doing cIRS");
+
+      List<ExpressionNode> args = new ArrayList<>(nonReceiverArguments);
+      args.add(0, getSelfRead(source));
+      return SNodeFactory.createImplicitReceiverSend(selector,
+          args.toArray(new ExpressionNode[0]),
+          getCurrentMethodScope(), getEnclosingMixinBuilder().getMixinId(), source);
+    }
+  }
+
+
   public ExpressionNode getSetterSend(final SSymbol identifier,
       final ExpressionNode exp, final SourceSection source) {
     // TODO: we probably need here a sanity check and perhaps a parser error
