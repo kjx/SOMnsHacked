@@ -30,6 +30,7 @@ public abstract class Invokable extends RootNode {
 
   @Override
   public Object execute(final VirtualFrame frame) {
+    //KJX System.out.println("execute: " + expressionOrSequence);
     return expressionOrSequence.executeGeneric(frame);
   }
 

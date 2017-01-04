@@ -267,13 +267,15 @@ public final class UninitializedDispatchNode {
     protected AccessModifier getMinimalVisibility() {
       // TODO: if we actually get a megamorphic super send,
       //       then we need to implement this
-      throw new NotYetImplementedException();
+      return AccessModifier.PUBLIC; //KJX WHAT A HACK
+      //throw new NotYetImplementedException();
     }
 
     @Override
     protected MixinDefinitionId getMixinForPrivateLockupOrNull() {
       // TODO: if we actually get a megamorphic super send,
       //       then we need to implement this
+      //return mixinForPrivateLookup;
       throw new NotYetImplementedException();
     }
   }

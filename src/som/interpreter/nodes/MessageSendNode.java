@@ -1,7 +1,5 @@
 package som.interpreter.nodes;
 
-import static som.interpreter.nodes.SOMNode.unwrapIfNecessary;
-
 import com.oracle.truffle.api.CompilerAsserts;
 import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.frame.VirtualFrame;
@@ -100,7 +98,6 @@ import som.primitives.arrays.PutAllNodeFactory;
 import som.primitives.arrays.ToArgumentsArrayNodeGen;
 import som.primitives.bitops.BitAndPrimFactory;
 import som.primitives.bitops.BitXorPrimFactory;
-import som.vm.NotYetImplementedException;
 import som.vm.constants.Classes;
 import som.vmobjects.SArray;
 import som.vmobjects.SBlock;
@@ -130,14 +127,15 @@ public final class MessageSendNode {
 
   public static GenericMessageSendNode createGeneric(final SSymbol selector,
       final ExpressionNode[] argumentNodes, final SourceSection source) {
-    if (argumentNodes != null &&
-        unwrapIfNecessary(argumentNodes[0]) instanceof ISpecialSend) {
-      throw new NotYetImplementedException();
-    } else {
+//    if (argumentNodes != null &&
+//        unwrapIfNecessary(argumentNodes[0]) instanceof ISpecialSend) {
+//      System.out.println("GMSN crashing on " + selector + " for " + argumentNodes);
+//      throw new NotYetImplementedException();
+//    } else {
       return new GenericMessageSendNode(selector, argumentNodes,
           UninitializedDispatchNode.createRcvrSend(source, selector, AccessModifier.PUBLIC),
           source);
-    }
+//    }
   }
 
   public abstract static class AbstractMessageSendNode extends ExprWithTagsNode

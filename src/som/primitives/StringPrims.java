@@ -52,6 +52,42 @@ public class StringPrims {
   }
 
   @GenerateNodeFactory
+  @Primitive("string:compareTo:")
+  public abstract static class ComparePrim extends BinaryComplexOperation {
+    protected ComparePrim(final SourceSection source) { super(false, source); }
+
+    @Override
+    protected boolean isTaggedWithIgnoringEagerness(final Class<?> tag) {
+      if (tag == StringAccess.class) {
+        return true;
+      } else {
+        return super.isTaggedWithIgnoringEagerness(tag);
+      }
+    }
+
+    @Specialization
+    public final int doString(final String receiver, final String argument) {
+      return receiver.compareTo(argument);
+    }
+
+    @Specialization
+    public final int doString(final String receiver, final SSymbol argument) {
+      return receiver.compareTo(argument.getString());
+    }
+
+    @Specialization
+    public final int doSSymbol(final SSymbol receiver, final String argument) {
+      return receiver.getString().compareTo(argument);
+    }
+
+    @Specialization
+    public final int doSSymbol(final SSymbol receiver, final SSymbol argument) {
+      return receiver.getString().compareTo(argument.getString());
+    }
+  }
+
+
+  @GenerateNodeFactory
   @Primitive("stringAsSymbol:")
   public abstract static class AsSymbolPrim extends UnaryBasicOperation {
     public AsSymbolPrim(final SourceSection source) { super(false, source); }

@@ -11,7 +11,7 @@ import som.instrumentation.DispatchNodeWrapper;
 @Instrumentable(factory = DispatchNodeWrapper.class)
 public abstract class AbstractDispatchNode
     extends Node implements DispatchChain {
-  public static final int INLINE_CACHE_SIZE = 6;
+  public static final int INLINE_CACHE_SIZE = 6000;  //KJX EVIL EVIL SATAN
   protected final SourceSection sourceSection;
 
   protected AbstractDispatchNode(final SourceSection source) {

@@ -441,8 +441,11 @@ public final class MixinBuilder {
       // contract for initializers
       // and we need to make sure that a potential Value class verifies
       // that it actually is a value
-      allExprs.add(IsValueCheckNode.create(
-          initializerSource, initializer.getSelfRead(initializerSource)));
+      // System.out.println("KJX SAYS: FUCK VALUE CLASSES");
+      allExprs.add(
+          IsValueCheckNode.create( initializerSource,
+              initializer.getSelfRead(initializerSource))
+          );
     }
 
     ExpressionNode body = SNodeFactory.createSequence(allExprs, initializerSource);

@@ -1,6 +1,6 @@
 dialect "kernan-prelude"
 
-class s2v(string) {
+class s2vWORKS(string) {
   def vec = platform.kernel.Array.new(string.size)
   for (1.asInteger.to(string.size)) do { n ->
       vec.at(n) put(string.at(n))
@@ -9,6 +9,13 @@ class s2v(string) {
   method size {string.size}
 }
 
+class s2vALSOWORKS(string) {
+  def vec = string
+  method at(i) {vec.at(i)}
+  method size {string.size}
+}
+
+method s2v(string) {string}
 
 print "Getting Parsers"
 

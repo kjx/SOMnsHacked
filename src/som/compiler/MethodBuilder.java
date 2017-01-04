@@ -451,7 +451,7 @@ public final class MethodBuilder {
       return SNodeFactory.createMessageSend(selector, new ExpressionNode[] {receiver}, false, source);
     } else {
       // otherwise, it is an implicit receiver send
-      //System.out.println("gGIRS doing cIRS");
+      //System.out.println("gGIRS doing cIRS " + selector);
 
       List<ExpressionNode> args = new ArrayList<>(nonReceiverArguments);
       args.add(0, receiver);
@@ -491,7 +491,7 @@ public final class MethodBuilder {
     String identifier = somNSname.substring(0,somNSname.length() - 2);
     //System.out.println("getGraceSetterSend SOMnName<" + somNSname + "> trimmed <" + identifier + ">");
 
-    debugPrint();
+    // debugPrint();
 
     Local variable = getLocal(identifier);
     if (variable != null) {
@@ -502,7 +502,7 @@ public final class MethodBuilder {
       //System.out.println("getGraceSetterSend building as a setter send");
     // otherwise, it is a setter send.
     return SNodeFactory.createImplicitReceiverSend(
-        symbolFor(somNSname),
+        MixinBuilder.getSetterName(symbolFor(identifier)),  //KJX note identifier not somNSName
         new ExpressionNode[] {getSelfRead(source), exp},
         getCurrentMethodScope(), getEnclosingMixinBuilder().getMixinId(), source);
   }
