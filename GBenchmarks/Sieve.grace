@@ -1,4 +1,4 @@
-import "richard/GBenchmark" as g
+import "GBenchmarks/GBenchmark" as g
 
 class sieve {
   inherit g.benchmark
