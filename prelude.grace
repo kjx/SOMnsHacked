@@ -2,6 +2,22 @@ dialect "none"
 
 method print (x) {x.asString.println}
 
+method if(test) then(this) else(that) {
+   test.ifTrue(this) ifFalse(that)
+}
+
+method if(test) then(this)  {
+   test.ifTrue(this)
+}
+
+method for(collection) do(block) {
+  collection.do( block )
+}
+
+method while(condition) do(block) {
+   condition.whileTrue(block)
+}
+
 method loadGraceModule (mod) {
  print "prelude##loadGraceModule {mod}.grace"
  def m = mod + ".grace"
